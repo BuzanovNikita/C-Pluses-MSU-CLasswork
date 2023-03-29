@@ -3,9 +3,16 @@
 
 using namespace std;
 
-struct Ex{
-    string s;
+class Ex{
+    const string s;
     int len1, len2;
+public:
+    Ex(const string s, int len1, int len2):s(s), len1(len1), len2(len2){};
+    void print() const{
+        cerr << s << len1;
+        if (len2 >= 0) cerr << ' ' << len2;
+        cout << endl;
+    }
 };
 
 template <typename T>
@@ -21,8 +28,8 @@ public:
     }
 
     void set( T arg, int coord );
-    T get(int coord)const;
     T* get_v()const{return _v;};
+    T get(int coord)const;
     T euc_norm()const;
     T max_norm()const;
     void print()const;
@@ -35,7 +42,7 @@ public:
     bool operator==(const Vec& another)const;
     T operator[](int i)const;
     T& operator[](int i);
-    const Vec operator+=(const Vec& another);
+    Vec& operator+=(const Vec& another);
 };
 
 //Operators
@@ -95,9 +102,10 @@ template <typename T>
 const Vec<T> Vec<T>::operator-(const Vec<T>& another)const{
     if ((this->_v == nullptr) || (another._v == nullptr)) throw "Exception: unknown error";
     if ((another._len < 0) || (this->_len < 0)) throw "Exception: unknown error";
-    char str[] = "Exception: addition of vectors of different lengths: ";
-    Ex e = {str, this->_len, another._len};
-    if (this->_len != another._len) throw &e;
+    if (this->_len != another._len){
+        Ex e ("Exception: addition of vectors of different lengths: ", this->_len, another._len);
+        throw e;
+    }
     Vec sum(this->_len);
     for(int i=0; i<_len; i++){
         sum._v[i] = this->_v[i] - another._v[i];
@@ -131,7 +139,7 @@ T operator^(const Vec<T>& first, const Vec<T>& second){
     return res;
 }
 template <typename T>
-const Vec<T> Vec<T>::operator+=(const Vec<T>& another){
+Vec<T>& Vec<T>::operator+=(const Vec<T>& another){
     *this = *this + another;
     return *this; 
 }
@@ -208,28 +216,11 @@ int main(void)
 {
     try{
         Vector();
-
-        /*int w1[4] = {1,2,3};
-        int w2[3] = {2,3,1};
-
-        Vec <int> v1(3, w1), v2(3, w2), v3(4);
-        std::cout << "v1 = " << v1 << std::endl;
-        std::cout << "v2 = " << v2 << std::endl;
-        v1 = (v3 += v2);
-        std::cout << "v3 = " << v3 << std::endl;
-        std::cout << "v1 = " << v1 << std::endl;
-        int pr = v1^v2;
-        std::cout << "v1^v2 = " << pr << std::endl;
-        v1[1] = 7;
-        std::cout << "v[1] = " << v1[1] << std::endl;*/
-
     } catch(const char* ex){
         cerr << ex << endl;
     }
     catch(const Ex& ex){
-        cerr << ex.s << ex.len1;
-        if (ex.len2 >= 0) cerr << ' ' << ex.len2;
-        cout << endl;
+        ex.print();
     }
     catch(...){
         cerr << "Exception: unknown error\n";

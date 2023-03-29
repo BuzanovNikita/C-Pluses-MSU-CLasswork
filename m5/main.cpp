@@ -3,9 +3,16 @@
 
 using namespace std;
 
-struct Ex{
-    string s;
+class Ex{
+    const string s;
     int len1, len2;
+public:
+    Ex(const string s, int len1, int len2):s(s), len1(len1), len2(len2){};
+    void print() const{
+        cerr << s << len1;
+        if (len2 >= 0) cerr << ' ' << len2;
+        cout << endl;
+    }
 };
 
 class Vec{
@@ -48,14 +55,18 @@ const Vec operator*(double a, const Vec& vec){
 }
 double Vec::operator[](int i)const{
     if ((this->_v == nullptr) || (this->_len < 0)) throw "Exception: unknown error";
-    Ex e = {"Exception: incorrect indexing: ", i, -1};
-    if ((i < 0) || (i >= this->_len)) throw e;
+    if ((i < 0) || (i >= this->_len)){
+        Ex e ("Exception: incorrect indexing: ", i, -1);        
+        throw e;
+    }
     return (_v[i]);
 }
 double& Vec::operator[](int i){
     if ((this->_v == nullptr) || (this->_len < 0)) throw "Exception: unknown error";
-    Ex e = {"Exception: incorrect indexing: ", i, -1};
-    if ((i < 0) || (i >= this->_len)) throw e;
+    if ((i < 0) || (i >= this->_len)){
+        Ex e ("Exception: incorrect indexing: ", i, -1);
+        throw e;
+    }
     return (_v[i]);
 }
 bool Vec::operator==(const Vec& another)const{
@@ -83,9 +94,10 @@ const Vec Vec::operator*(double a)const{
 const Vec Vec::operator-(const Vec& another)const{
     if ((this->_v == nullptr) || (another._v == nullptr)) throw "Exception: unknown error";
     if ((another._len < 0) || (this->_len < 0)) throw "Exception: unknown error";
-    char str[] = "Exception: addition of vectors of different lengths: ";
-    Ex e = {str, this->_len, another._len};
-    if (this->_len != another._len) throw &e;
+    if (this->_len != another._len){
+        Ex e ("Exception: addition of vectors of different lengths: ", this->_len, another._len);
+        throw e;
+    }
     Vec sum(this->_len);
     for(int i=0; i<_len; i++){
         sum._v[i] = this->_v[i] - another._v[i];
@@ -95,8 +107,10 @@ const Vec Vec::operator-(const Vec& another)const{
 const Vec Vec::operator+(const Vec& another)const{
     if ((this->_v == nullptr) || (another._v == nullptr)) throw "Exception: unknown error";
     if ((another._len < 0) || (this->_len < 0)) throw "Exception: unknown error";
-    Ex e = {"Exception: addition of vectors of different lengths: ", this->_len, another._len};
-    if (this->_len != another._len) throw e;
+    if (this->_len != another._len){
+        Ex e ("Exception: addition of vectors of different lengths: ", this->_len, another._len);
+        throw e;
+    }
     Vec sum(this->_len);
     for(int i=0; i<_len; i++){
         sum._v[i] = this->_v[i] + another._v[i];
@@ -169,9 +183,7 @@ int main(void)
         cerr << ex << endl;
     }
     catch(const Ex& ex){
-        cerr << ex.s << ex.len1;
-        if (ex.len2 >= 0) cerr << ' ' << ex.len2;
-        cout << endl;
+        ex.print();
     }
     catch(...){
         cerr << "Exception: unknown error\n";

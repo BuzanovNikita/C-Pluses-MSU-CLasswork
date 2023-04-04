@@ -178,11 +178,10 @@ int main(void)
 {
     try{
         error();
-
-    } catch(const char* ex){
+    } catch(char* const ex){
         cerr << ex << endl;
     }
-    catch(const Ex& ex){
+    catch(Ex const & ex){
         ex.print();
     }
     catch(...){

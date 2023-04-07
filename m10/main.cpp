@@ -7,7 +7,7 @@ class Ex{
     const string s;
     int len1, len2;
 public:
-    Ex(const string s, int len1, int len2):s(s), len1(len1), len2(len2){};
+    Ex(string const& s, int len1, int len2):s(s), len1(len1), len2(len2){};
     void print() const{
         cerr << s << len1;
         if (len2 >= 0) cerr << ' ' << len2;

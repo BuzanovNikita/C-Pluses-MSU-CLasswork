@@ -93,7 +93,7 @@ void print(const std::list<T> lst){
 
 void parser(int const& argc, char** const argv){
     std::list<int> lst;
-    int tmp, first_par, sec_par;
+    int tmp, first_par=0, sec_par=0;
     while(1){
         std::cin >> tmp;
         if(std::cin.eof()) break;

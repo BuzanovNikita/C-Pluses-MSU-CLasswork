@@ -6,7 +6,6 @@ class Parser{
     void S();
     void A();
     void gc(){std::cin.get(c);}
-    int cnt;
     std::vector<char> vec;
 public:
     void analize();
@@ -14,10 +13,8 @@ public:
 
 void Parser::analize(){
     try{
-        cnt = 0;
         gc();
         S();
-        for(int i=0; i<cnt; ++i) std::cout << '2';
         for(auto it=vec.begin(); it!=vec.end(); ++it) std::cout << *it;
         std::cout << std::endl;
     }
@@ -29,7 +26,7 @@ void Parser::analize(){
 
 void Parser::A(){
     if(c == 'a'){
-        ++cnt;
+        vec.insert(vec.begin(), '2');
         gc();
         A();
         vec.push_back('a');
@@ -45,7 +42,7 @@ void Parser::A(){
 
 void Parser::S(){
     if(c == 'a'){
-        ++cnt;
+        vec.insert(vec.begin(), '2');
         gc();
         A();
         vec.push_back('a');
